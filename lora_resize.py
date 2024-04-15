@@ -193,6 +193,7 @@ def change_lora_rank(state_dict,
         elif method == "svd":
             new_lora_up, new_lora_down = svd(full_mat, lora_up, lora_down, **kwargs)
         elif method == "zero_pad":
+            assert rank > cur_rank
             new_lora_up, new_lora_down = simple_expand(full_mat, lora_up, lora_down, **kwargs)
         elif method == "auto":
             if (not "cuda" in device and max([*lora_down.shape, *lora_up.shape]) <= 1024) or max(
