@@ -1,6 +1,6 @@
-# LoRARedo
+# LoRAResize
 
-LoRARedo is a simple tool that allows you to further compress or expand a trained LoRA.
+LoRAResize is a simple tool that allows you to further compress or expand a trained LoRA.
 Expansion is useful if you've trained a LoRA then realized you'd like to try a larger rank but don't want to start training over
 Compression, I believe speaks for itself.
 
@@ -17,7 +17,7 @@ A couple settings to be aware of when using the gradient optimization method:
 you may need to adjust the settings a bit to your needs
 
 ```python
-from lora_redo import change_lora_rank, simple_expand_lora
+from lora_resize import change_lora_rank, simple_expand_lora
 import torch
 
 state_dict = torch.load("path/to/your/lora.pth")
