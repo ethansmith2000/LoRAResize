@@ -67,8 +67,7 @@ def get_least_squares_solution(weight_matrix, orig_up, orig_down, **kwargs):
             diff = torch.abs(prediction - matrix)
             pos = diff.argmax()
             max_diff = diff.max().item()
-            # print(max_diff, matrix.flatten()[pos].item(), prediction.flatten()[pos].item())
-            max_rel_error = (max_diff / matrix.flatten()[pos].item()) * 100
+            max_rel_error = (max_diff / matrix.flatten()[pos].item() + 1e-6) * 100
 
         print(f"LOSS: {losses[-1]}, ABS MEAN {prediction.abs().mean():.7f} MAX DIFF: {max_diff:.7f}, MAX REL ERROR: {max_rel_error:.7f}%")
         print(f"UP NORM {up.norm().item():.7f}, TARGET UP NORM {target_up_norm.item():.7f}, DOWN NORM {down.norm().item():.7f}, TARGET DOWN NORM {target_down_norm.item():.7f}")
@@ -166,8 +165,8 @@ def change_lora_rank(state_dict,
     return state_dict
 
 
-def simple_expand_lora(state_dict, new_rank):
-    lora_keys = [k for k in state_dict.keys() if "lora_down" in k]
+def simple_expand_lora(state_dict, new_rank, down_name="lora_down", up_name="lora_up",):
+    lora_keys = [k for k in state_dict.keys() if down_name in k]
     weights_with_lora = [k.split(".lora")[0] for k in lora_keys]
     new_state_dict = {k: v for k, v in state_dict.items() if "lora" in k}
 
@@ -176,7 +175,7 @@ def simple_expand_lora(state_dict, new_rank):
 
     for key in tqdm(weights_with_lora):
         with torch.no_grad():
-            lora_down_key, lora_up_key = key + ".lora_down.weight", key + ".lora_up.weight"
+            lora_down_key, lora_up_key = key + f".{down_name}.weight", key + f".{up_name}.weight"
             lora_down, lora_up = state_dict[lora_down_key], state_dict[lora_up_key]
             if "conv" in key:
                 # out, rank, 1, 1
