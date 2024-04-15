@@ -1,7 +1,9 @@
 # LoRAResize
 
 LoRAResize is a simple tool that allows you to further compress or expand a trained LoRA.
-Expansion is useful if you've trained a LoRA then realized you'd like to try a larger rank but don't want to start training over
+
+Expansion is useful if you've trained a LoRA then realized you'd like to try a larger rank but don't want to start training over.
+
 Compression, I believe speaks for itself.
 
 There are a few methods employed here:
